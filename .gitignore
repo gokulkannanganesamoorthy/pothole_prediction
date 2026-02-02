@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Data
+data/raw/
+data/processed/
+
+# Models (Optional: keep if you want to track weights, but usually too large)
+models/
+
+# OS
+.DS_Store
