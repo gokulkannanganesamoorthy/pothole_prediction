@@ -1,6 +1,12 @@
 import torch
 import cv2
 import numpy as np
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 from src.model import PotholeRiskModel
 from src.data_generator import SyntheticDataGenerator
 from torchvision import transforms
@@ -24,6 +30,14 @@ class PotholePredictor:
         ])
         
         self.generator = SyntheticDataGenerator()
+        
+        # Configure Gemini
+        api_key = os.getenv("GEMINI_API_KEY")
+        if api_key:
+            genai.configure(api_key=api_key)
+            self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+        else:
+            self.gemini_model = None
 
     def predict(self, image_path, weather='Sunny', traffic='Low', temperature=25):
         """
@@ -88,6 +102,27 @@ class PotholePredictor:
         else:
             return 'Sunny'
 
+    def verify_with_gemini(self, image_path):
+        """
+        Uses Gemini API to verify the road condition.
+        """
+        if not self.gemini_model:
+            return "Gemini API Key not found. Skipping verification."
+            
+        try:
+            img = Image.open(image_path)
+            prompt = """
+            Analyze this road image for pothole formation risk.
+            1. Describe the road condition (Good, Cracks, Potholes).
+            2. Estimate a Risk Score (0-10) for future pothole formation.
+            3. Provide a one-sentence reasoning.
+            Format: Condition: [Value] | Risk: [Value/10] | Reason: [Text]
+            """
+            response = self.gemini_model.generate_content([prompt, img])
+            return response.text.strip()
+        except Exception as e:
+            return f"Gemini verification failed: {e}"
+
 import argparse
 import os
 
@@ -119,7 +154,13 @@ if __name__ == "__main__":
             # Calibrated Thresholds: Model output is conservative, typically < 0.25 even for bad roads.
             # > 0.4 is Critical, > 0.15 is High, > 0.05 is Moderate.
             print(f"Risk Level: {'CRITICAL' if risk > 0.1 else 'HIGH' if risk > 0.07 else 'MODERATE' if risk > 0.05 else 'LOW'}")
-            print("--------------------------\n")
+            print("--------------------------")
+            
+            # Gemini Verification
+            print("\n--- Gemini Cross-Verification ---")
+            gemini_result = predictor.verify_with_gemini(args.image)
+            print(gemini_result)
+            print("---------------------------------\n")
         except Exception as e:
             print(f"Error: {e}")
             
