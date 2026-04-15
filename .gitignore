@@ -8,8 +8,9 @@ venv/
 # Data
 data/raw/
 data/processed/
+data/
 
-# Models (Optional: keep if you want to track weights, but usually too large)
+# # Models (Optional: keep if you want to track weights, but usually too large)
 models/
 
 # OS

@@ -2,6 +2,7 @@ import torch
 import cv2
 import numpy as np
 import google.generativeai as genai
+import sys
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -18,6 +19,11 @@ class PotholePredictor:
         
         # Load Model
         self.model = PotholeRiskModel().to(self.device)
+        if not os.path.exists(model_path):
+            print(f"\nERROR: Model weights not found at {model_path}")
+            print("Please run './run.sh' or 'python -m src.train' to train the model first.")
+            sys.exit(1)
+            
         self.model.load_state_dict(torch.load(model_path, map_location=self.device))
         self.model.eval()
         
@@ -35,7 +41,7 @@ class PotholePredictor:
         api_key = os.getenv("GEMINI_API_KEY")
         if api_key:
             genai.configure(api_key=api_key)
-            self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+            self.gemini_model = genai.GenerativeModel('gemini-2.0-flash-lite')
         else:
             self.gemini_model = None
 

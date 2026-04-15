@@ -13,7 +13,17 @@ def train_model(num_epochs=5, batch_size=16, learning_rate=0.001):
     
     # 1. Prepare Dataset
     print("Loading Dataset...")
-    full_dataset = RoadDamageDataset(root_dir='data/raw/China_MotorBike', mode='train')
+    data_path = 'data/raw/China_MotorBike'
+    if not os.path.exists(os.path.join(data_path, 'train', 'images')):
+        print(f"\nERROR: Training data not found at {data_path}")
+        print("Please run 'python -m src.setup_data' for instructions on how to acquire the dataset.")
+        return
+
+    full_dataset = RoadDamageDataset(root_dir=data_path, mode='train')
+    if len(full_dataset) == 0:
+        print(f"\nERROR: No images found in {data_path}/train/images")
+        print("Please follow the instructions from 'python -m src.setup_data' to acquire the dataset.")
+        return
     
     # Split Train/Val (80/20)
     train_size = int(0.8 * len(full_dataset))
