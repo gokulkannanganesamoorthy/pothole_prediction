@@ -54,6 +54,21 @@ python3 -m src.inference --image path/to/image.jpg
 python3 -m src.inference --image path/to/image.jpg --weather Rainy --traffic High
 ```
 
+### Model Evaluation
+The system includes built-in tools for performance visualization:
+
+1. **Training Progress**: To train the model and generate accuracy/loss graphs:
+   ```bash
+   python3 -m src.train
+   ```
+   Graphs are saved to `metrics/loss_accuracy.png`.
+
+2. **Confusion Matrix**: To evaluate the trained model:
+   ```bash
+   python3 -m src.evaluate
+   ```
+   Confusion matrix and precision/recall reports are saved to `metrics/confusion_matrix.png`.
+
 ### REST API Service
 The system can be deployed as a background service using FastAPI:
 ```bash

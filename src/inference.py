@@ -159,7 +159,7 @@ if __name__ == "__main__":
             print(f"Predicted Risk Score: {risk:.4f}")
             # Calibrated Thresholds: Model output is conservative, typically < 0.25 even for bad roads.
             # > 0.4 is Critical, > 0.15 is High, > 0.05 is Moderate.
-            print(f"Risk Level: {'CRITICAL' if risk > 0.1 else 'HIGH' if risk > 0.07 else 'MODERATE' if risk > 0.05 else 'LOW'}")
+            print(f"Risk Level: {'CRITICAL' if risk > 0.9 else 'HIGH' if risk > 0.85 else 'MODERATE' if risk > 0.8 else 'LOW'}")
             print("--------------------------")
             
             # Gemini Verification
