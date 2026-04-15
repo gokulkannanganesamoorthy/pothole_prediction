@@ -69,6 +69,25 @@ The system includes built-in tools for performance visualization:
    ```
    Confusion matrix and precision/recall reports are saved to `metrics/confusion_matrix.png`.
 
+## 📈 Model Performance
+
+The following graphs show the training progress and classification performance of the model on the RDD2022 dataset.
+
+### Training Progress (Accuracy & Loss)
+![Training Progress](metrics/loss_accuracy.png)
+
+### Confusion Matrix
+![Confusion Matrix](metrics/confusion_matrix.png)
+
+### Technical Specifications
+| Feature | Details |
+| :--- | :--- |
+| **Smoothing** | Exponential Moving Average (factor: 0.8) |
+| **Activation** | ReLU (hidden layers) & Sigmoid (output layer) |
+| **Architecture** | ResNet18 + MLP Fusion Head |
+| **Loss Function**| BCELoss (Binary Cross Entropy) |
+| **Evaluation** | Precision, Recall, F1-Score, and Support |
+
 ### REST API Service
 The system can be deployed as a background service using FastAPI:
 ```bash
