@@ -1,112 +1,77 @@
 # Pothole Risk Prediction System
 
-A Multi-Modal Deep Learning system that predicts the **risk of pothole formation** by combining visual road analysis with environmental conditions (Weather, Traffic).
+A Multi-Modal Deep Learning system designed to estimate the risk of pothole formation by integrating visual analysis of road surfaces with environmental context such as weather conditions and traffic load.
 
-## 🚀 Features
+## Features
 
-- **Visual Analysis**: Uses a ResNet18 CNN to detect road damage (cracks, existing potholes).
-- **Environmental Context**: Incorporates Weather (Rain/Snow) and Traffic load into the risk calculation.
-- **Auto-Detect Weather**: Automatically estimates whether it's Sunny, Rainy, or Snowy from the image itself.
-- **Risk Prediction**: Outputs a "Risk Score" and "Severity Level" (Low, Moderate, High, Critical).
+- Visual Analysis: Utilizes a ResNet18 Convolutional Neural Network (CNN) to detect existing road damage and surface fatigue.
+- Environmental Context: Incorporates atmospheric conditions (Weather) and traffic intensity into the risk estimation logic.
+- Automated Weather Detection: Includes a heuristic-based classifier to estimate weather conditions (Sunny, Rainy, Snowy) directly from input imagery.
+- Risk Assessment: Generates a numerical risk score and classifies the severity into one of four levels: Low, Moderate, High, or Critical.
 
-## 🛠️ Setup
+## Installation and Setup
 
-1.  **Create a Virtual Environment**:
-
+1.  Initialize Virtual Environment:
     ```bash
     python3 -m venv venv
     source venv/bin/activate
     ```
 
-2.  **Install Dependencies**:
-
+2.  Install Required Packages:
     ```bash
     pip install -r requirements.txt
     ```
 
-3.  **Download Data**:
-    If you want to retrain the model, you need the **RDD2022 (China_MotorBike)** subset.
+3.  Acquire Dataset (For Training):
+    The model utilizes the RDD2022 (China_MotorBike) subset for training.
 
-    #### Automated Setup
+    - Automated Setup:
+      Run the following command to initialize directories and receive specific instructions:
+      ```bash
+      python3 -m src.setup_data
+      ```
 
-    Run the setup script to create the directory structure and see detailed instructions:
+    - Manual Download:
+      1. Download the dataset archive: [RDD2022_China_MotorBike.zip](https://bigdatacup.s3.ap-northeast-1.amazonaws.com/2022/CRDDC2022/RDD2022/Country_Specific_Data_CRDDC2022/RDD2022_China_MotorBike.zip)
+      2. Extract archives into the `data/raw/China_MotorBike/` directory.
+      3. Ensure the final structure adheres to the standard train/test partitioning with associated images and annotations.
 
-    ```bash
-    python3 -m src.setup_data
-    ```
+## Usage Instructions
 
-    #### Manual Download
-    1.  Download the subset zip: [RDD2022_China_MotorBike.zip](https://bigdatacup.s3.ap-northeast-1.amazonaws.com/2022/CRDDC2022/RDD2022/Country_Specific_Data_CRDDC2022/RDD2022_China_MotorBike.zip)
-    2.  Extract the contents into `data/raw/China_MotorBike/`.
-    3.  Ensure your structure looks like this:
-        ```text
-        data/raw/China_MotorBike/
-        ├── train/
-        │   ├── images/
-        │   └── annotations/
-        └── test/
-            ├── images/
-            └── annotations/
-        ```
-    4.  **Note**: If the zip contains an `xmls` folder inside `annotations`, move the `.xml` files directly into the `annotations` folder using:
-        ```bash
-        mv data/raw/China_MotorBike/train/annotations/xmls/*.xml data/raw/China_MotorBike/train/annotations/
-        ```
-
-## 🏃 Usage
-
-### Quick Start
-
-Run the helper script to auto-train (if needed) and test on a sample image:
-
+### General Workflow
+A helper script is provided to manage training (if model weights are absent) and run a demonstration:
 ```bash
 ./run.sh
 ```
 
-### Run on Your Own Image
-
-To test a specific road image:
-
+### Command Line Inference
+To perform analysis on a specific image:
 ```bash
-# Basic (Auto-detect weather)
-python -m src.inference --image path/to/image.jpg
+# Standard inference (automatic weather detection)
+python3 -m src.inference --image path/to/image.jpg
 
-# Simulation (Force specific conditions)
-python -m src.inference --image path/to/image.jpg --weather Rainy --traffic High
+# Simulated inference (manually specified conditions)
+python3 -m src.inference --image path/to/image.jpg --weather Rainy --traffic High
 ```
 
-### Options
-
-- `--image`: Path to the image file.
-- `--weather`: `Sunny`, `Rainy`, `Snowy` (Auto-detected if omitted).
-- `--traffic`: `Low`, `Medium`, `High` (Default: Low).
-- `--temp`: Temperature in Celsius (Default: 25).
-
-## 🧠 How it Works
-
-1.  **Visual Encoder**: The CNN extracts features from the road image (e.g., detecting alligator cracks).
-2.  **Metadata Encoder**: A separate network processes the environmental factors.
-3.  **Fusion Layer**: Combines both inputs to calculate a final **Risk Score**.
-    - _Example_: A road with minor cracks (Medium Risk) + Heavy Rain (Multiplier) = **Critical Risk**.
-
-## 🌐 REST API
-
-You can also run the system as a REST API:
-
+### REST API Service
+The system can be deployed as a background service using FastAPI:
 ```bash
-# Start the server
 python3 -m src.api
 ```
+The API exposes a POST `/predict` endpoint for remote risk assessment.
 
-### Endpoints
-- **POST `/predict`**: Upload an image to get risk assessment.
-  - Parameters: `image` (file), `weather` (optional), `traffic` (optional), `temp` (optional).
-- **GET `/health`**: Check server status.
+## Technical Methodology
 
-## 📂 Project Structure
+1.  Visual Encoder: Features are extracted from input images to identify patterns indicative of structural decay.
+2.  Metadata Encoder: Environmental parameters are processed through a dense neural network.
+3.  Fusion and Prediction: The system fuses visual and environmental features to calculate a risk score. Environmental factors act as multipliers on the base visual risk to account for accelerated decay in harsh conditions.
 
+## Project Structure
 
-- `src/model.py`: Neural Network Architecture.
-- `src/inference.py`: Prediction script with Auto-Weather detection.
-- `src/train.py`: Training loop.
-- `src/data_generator.py`: Synthetic data simulation logic.
+- src/model.py: Neural Network architecture definitions.
+- src/inference.py: Main prediction logic and weather detection heuristics.
+- src/api.py: REST API implementation.
+- src/train.py: Training and validation routines.
+- src/data_generator.py: Logic for environmental simulation and risk scoring.
+- src/setup_data.py: Utility for data directory initialization.
