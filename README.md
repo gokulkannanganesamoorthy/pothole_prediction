@@ -79,6 +79,15 @@ The following graphs show the training progress and classification performance o
 ### Confusion Matrix
 ![Confusion Matrix](metrics/confusion_matrix.png)
 
+### Classification Report
+| Category | Precision | Recall | F1-Score | Support |
+| :--- | :--- | :--- | :--- | :--- |
+| **LOW** | 0.81 | 0.86 | 0.83 | 157 |
+| **MODERATE** | 0.27 | 0.34 | 0.30 | 41 |
+| **HIGH** | 0.00 | 0.00 | 0.00 | 0 |
+| **CRITICAL** | 0.96 | 0.71 | 0.81 | 198 |
+| **Average / Total** | **0.83** | **0.73** | **0.77** | **396** |
+
 ### Technical Specifications
 | Feature | Details |
 | :--- | :--- |
