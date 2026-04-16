@@ -12,21 +12,23 @@ A Multi-Modal Deep Learning system designed to estimate the risk of pothole form
 ## Installation and Setup
 
 1.  Initialize Virtual Environment:
+
     ```bash
     python3 -m venv venv
     source venv/bin/activate
     ```
 
 2.  Install Required Packages:
+
     ```bash
     pip install -r requirements.txt
     ```
 
 3.  Acquire Dataset (For Training):
     The model utilizes the RDD2022 (China_MotorBike) subset for training.
-
     - Automated Setup:
       Run the following command to initialize directories and receive specific instructions:
+
       ```bash
       python3 -m src.setup_data
       ```
@@ -39,13 +41,17 @@ A Multi-Modal Deep Learning system designed to estimate the risk of pothole form
 ## Usage Instructions
 
 ### General Workflow
+
 A helper script is provided to manage training (if model weights are absent) and run a demonstration:
+
 ```bash
 ./run.sh
 ```
 
 ### Command Line Inference
+
 To perform analysis on a specific image:
+
 ```bash
 # Standard inference (automatic weather detection)
 python3 -m src.inference --image path/to/image.jpg
@@ -55,12 +61,15 @@ python3 -m src.inference --image path/to/image.jpg --weather Rainy --traffic Hig
 ```
 
 ### Model Evaluation
+
 The system includes built-in tools for performance visualization:
 
 1. **Training Progress**: To train the model and generate accuracy/loss graphs:
+
    ```bash
    python3 -m src.train
    ```
+
    Graphs are saved to `metrics/loss_accuracy.png`.
 
 2. **Confusion Matrix**: To evaluate the trained model:
@@ -74,34 +83,41 @@ The system includes built-in tools for performance visualization:
 The following graphs show the training progress and classification performance of the model on the RDD2022 dataset.
 
 ### Training Progress (Accuracy & Loss)
+
 ![Training Progress](metrics/loss_accuracy.png)
 
 ### Confusion Matrix
+
 ![Confusion Matrix](metrics/confusion_matrix.png)
 
 ### Classification Report
-| Category | Precision | Recall | F1-Score | Support |
-| :--- | :--- | :--- | :--- | :--- |
-| **LOW** | 0.82 | 0.65 | 0.72 | 130 |
-| **MODERATE** | 0.23 | 0.43 | 0.30 | 28 |
-| **HIGH** | 0.18 | 0.38 | 0.25 | 40 |
-| **CRITICAL** | 0.84 | 0.67 | 0.75 | 198 |
-| **Average / Total** | **0.72** | **0.62** | **0.66** | **396** |
+
+| Category            | Precision | Recall   | F1-Score | Support |
+| :------------------ | :-------- | :------- | :------- | :------ |
+| **LOW**             | 0.82      | 0.65     | 0.72     | 130     |
+| **MODERATE**        | 0.23      | 0.43     | 0.30     | 28      |
+| **HIGH**            | 0.18      | 0.38     | 0.25     | 40      |
+| **CRITICAL**        | 0.84      | 0.67     | 0.75     | 198     |
+| **Average / Total** | **0.72**  | **0.62** | **0.66** | **396** |
 
 ### Technical Specifications
-| Feature | Details |
-| :--- | :--- |
-| **Smoothing** | Exponential Moving Average (factor: 0.8) |
-| **Activation** | ReLU (hidden layers) & Sigmoid (output layer) |
-| **Architecture** | ResNet18 + MLP Fusion Head |
-| **Loss Function**| BCELoss (Binary Cross Entropy) |
-| **Evaluation** | Precision, Recall, F1-Score, and Support |
+
+| Feature           | Details                                       |
+| :---------------- | :-------------------------------------------- |
+| **Smoothing**     | Exponential Moving Average (factor: 0.8)      |
+| **Activation**    | ReLU (hidden layers) & Sigmoid (output layer) |
+| **Architecture**  | ResNet18 + MLP Fusion Head                    |
+| **Loss Function** | BCELoss (Binary Cross Entropy)                |
+| **Evaluation**    | Precision, Recall, F1-Score, and Support      |
 
 ### REST API Service
+
 The system can be deployed as a background service using FastAPI:
+
 ```bash
 python3 -m src.api
 ```
+
 The API exposes a POST `/predict` endpoint for remote risk assessment.
 
 ## Technical Methodology
