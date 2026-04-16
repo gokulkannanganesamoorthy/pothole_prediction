@@ -102,13 +102,13 @@ def plot_confusion_matrix_sns(y_true, y_pred, classes, save_path='metrics/confus
 def get_risk_level(risk_score):
     """
     Maps continuous risk score to 4 discrete categories.
-    Using thresholds exactly as requested by user.
+    Using inclusive thresholds to ensure boundary samples (like 0.85) are captured.
     """
-    if risk_score > 0.9:
+    if risk_score >= 0.9:
         return 3 # CRITICAL
-    elif risk_score > 0.85:
+    elif risk_score >= 0.85:
         return 2 # HIGH
-    elif risk_score > 0.8:
+    elif risk_score >= 0.8:
         return 1 # MODERATE
     else:
         return 0 # LOW
