@@ -82,11 +82,11 @@ The following graphs show the training progress and classification performance o
 ### Classification Report
 | Category | Precision | Recall | F1-Score | Support |
 | :--- | :--- | :--- | :--- | :--- |
-| **LOW** | 0.74 | 0.95 | 0.83 | 130 |
-| **MODERATE** | 0.27 | 0.50 | 0.35 | 28 |
-| **HIGH** | 0.41 | 0.33 | 0.36 | 40 |
-| **CRITICAL** | 0.96 | 0.71 | 0.81 | 198 |
-| **Average / Total** | **0.78** | **0.73** | **0.74** | **396** |
+| **LOW** | 0.82 | 0.65 | 0.72 | 130 |
+| **MODERATE** | 0.23 | 0.43 | 0.30 | 28 |
+| **HIGH** | 0.18 | 0.38 | 0.25 | 40 |
+| **CRITICAL** | 0.84 | 0.67 | 0.75 | 198 |
+| **Average / Total** | **0.72** | **0.62** | **0.66** | **396** |
 
 ### Technical Specifications
 | Feature | Details |

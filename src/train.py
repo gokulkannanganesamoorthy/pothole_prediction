@@ -134,5 +134,10 @@ def train_model(num_epochs=5, batch_size=16, learning_rate=0.001):
     print("Model saved to models/pothole_risk_model.pth")
 
 if __name__ == "__main__":
-    # Run for just 2 epochs for demonstration
-    train_model(num_epochs=2, batch_size=16)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--epochs", type=int, default=5, help="Number of training epochs")
+    parser.add_argument("--batch_size", type=int, default=16, help="Batch size")
+    args = parser.parse_args()
+    
+    train_model(num_epochs=args.epochs, batch_size=args.batch_size)
