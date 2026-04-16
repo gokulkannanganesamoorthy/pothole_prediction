@@ -102,7 +102,7 @@ def plot_confusion_matrix_sns(y_true, y_pred, classes, save_path='metrics/confus
 def get_risk_level(risk_score):
     """
     Maps continuous risk score to 4 discrete categories.
-    Matches logic in src/inference.py (with slight adjustments for balanced buckets if needed)
+    Using thresholds exactly as requested by user.
     """
     if risk_score > 0.9:
         return 3 # CRITICAL
